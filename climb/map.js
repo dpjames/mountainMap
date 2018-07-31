@@ -53,7 +53,7 @@ function initMap(){
    callout = new ol.Overlay({
       element: document.getElementById("popup")});
    layers = [
-      new ol.layer.Tile({source: new ol.source.OSM()}),
+      new ol.layer.Tile({source: new ol.source.OSM({crossOrigin : null})}),
       peaksLayer];
    const view = new ol.View({
       center: ol.proj.fromLonLat([-122.44, 47.25]),
