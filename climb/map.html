@@ -18,8 +18,13 @@
             <div class="label">Rating: <div class="data" id="rating"></div></div>
             <div class="label">Hits:   <div class="data" id="hits"></div></div>
          </div>
-         <iframe id="betaView"></iframe>
-         <div id="rollover"></div>
+         <div class="hide" id="leftTab">
+            <iframe id="betaView"></iframe>
+            <div id="rollover">
+               Click on a cluster to populate!
+            </div>
+         </div>
+            <div id="leftTabToggle" onclick="toggleLeftTab()">&gt;</div>
       </div>
    </body>
 </html>

@@ -68,15 +68,12 @@ function initMap(){
 }
 function populateCallout(f, c){
    const props = f.getProperties();
-   let googleLink = document.getElementById("link");
-   googleLink.setAttribute("href",
-      "https://www.google.com/search?q="
-      +"site:www.summitpost.org+"
-      +props.NAME.replace(" ", "+"));
-   googleLink.innerHTML = props.NAME;
+   let link = document.getElementById("link");
+   link.setAttribute("href", "https://www.summitpost.org"+props.URL.replace(" ",""));
+   link.innerHTML = props.NAME;
    document.getElementById("rating").innerHTML = props.SCORE;
    document.getElementById("hits").innerHTML = props.HITS;
-   document.getElementById("betaView").setAttribute("src", "https://www.summitpost.org"+props.URL.replace(" ",""));
+   populateBetaView(props.URL);
    callout.setPosition(c);
 }
 function zoomTo(e){
@@ -84,6 +81,9 @@ function zoomTo(e){
    if(map.getView().getZoom() > MAX_ZOOM){
       map.getView().setZoom(MAX_ZOOM);
    }
+}
+function populateBetaView(url){
+   document.getElementById("betaView").setAttribute("src", "https://www.summitpost.org"+url.replace(" ",""));
 }
 function populateOverlay(features){
    const ro = document.getElementById("rollover");
@@ -94,16 +94,16 @@ function populateOverlay(features){
       const name = props.NAME;
       const hits = props.HITS;
       const rate = props.SCORE;
-      const link = "https://www.google.com/search?q="
-                  +"site:www.summitpost.org+"
-                  + name.replace(" ", "+");
+      const link = props.URL;
       const extent = f.getGeometry().getExtent();
       const entry = [
          "<div id='"+name+"Entry'>",
          "<h4>",
-         "<a href='"+link+"'>",
+         //"<a href='"+link+"'>",
+         "<div onclick='populateBetaView(\""+link+"\")'>",
          name,
-         "</a>",
+         "</div>",
+         //"</a>",
          "</h4>",
          "<div>",
          hits,
@@ -121,8 +121,22 @@ function populateOverlay(features){
       ro.innerHTML += entry;
    });
 }
+function toggleLeftTab(){
+   const leftTab = document.getElementById("leftTab");
+   leftTab.classList.toggle("hide");
+   const toggle = document.getElementById("leftTabToggle");
+   if(toggle.innerHTML === "&gt;"){
+      toggle.innerHTML = "&lt;";
+      toggle.style.left = "33%";
+   }else{
+      toggle.innerHTML = "&gt;";
+      toggle.style.left = "0";
+   }
+}
 function mapClick(evt){
+   let hasFeature = false;
    map.forEachFeatureAtPixel(evt.pixel, function(cluster){
+      hasFeature = true;
       const features = cluster.get("features");
       if(features.length === 1){
          populateCallout(features[0], evt.coordinate);   
@@ -130,6 +144,9 @@ function mapClick(evt){
          populateOverlay(features);
       }
    });
+   if(!hasFeature){
+      callout.setPosition(undefined);
+   }
 }
 function main(){
    initMap();
