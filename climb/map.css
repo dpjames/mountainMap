@@ -1,0 +1,41 @@
+.map {
+  height: 100%;
+  width: 100%;
+  position:relative;
+}
+#info *{
+   font-size:30px;
+}
+#rollover{
+   width:15%;
+   height:33%;
+   position:absolute;
+   background-color:rgba(255,255,255,.3);
+   overflow-y:scroll;
+   z-index:10;
+   bottom:0;
+}
+#betaView{
+   top:0;
+   width:33%;
+   height:66%;
+   position:absolute;
+   z-index:10;
+}
+#popup{
+   width:auto;
+   padding: 10px 25px;
+   border-style:solid;
+   border-color:black;
+   background-color:rgb(300,300,300);
+   border-radius:100px;
+   position:absolute;
+   z-index:10;
+}
+#link, .label{
+   overflow:hidden;
+   white-space: nowrap;
+}
+.data{
+   float:right;
+}

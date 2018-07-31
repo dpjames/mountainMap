@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.1.3/css/ol.css" type="text/css">
+    <style>
+      .map {
+        height: 100%;
+        width: 100%;
+        position:relative;
+      }
+      #info *{
+         font-size:30px;
+      }
+      #popup{
+         width:auto;
+         padding: 10px 25px;
+         border-style:solid;
+         border-color:black;
+         background-color:rgba(300,300,300,.75);
+         border-radius:100px;
+         position:absolute;
+         z-index:10;
+      }
+      #info *{
+         overflow:hidden;
+         white-space: nowrap;
+      }
+    </style>
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.1.3/build/ol.js"></script>
+    <title>OpenLayers example</title>
+  </head>
+  <body>
+    <div id="map" class="map">
+       <div id='popup'>
+         <div id="info">
+            <div id="name">Name: <a id="link"></a></div>
+            <div id="rating"></div> 
+            <div id="hits"></div> 
+         </div>
+       </div>
+    </div>
+    <script type="text/javascript">
+      function urlescape(s){
+         return s.split(" ").join("+");
+      }
+      var olpopup = new ol.Overlay({
+        element: document.getElementById('popup')
+      });
+      var src = new ol.source.Vector({
+         url:'./myFile.geojson',
+         format: new ol.format.GeoJSON()
+      });
+      var clusterSource = new ol.source.Cluster({
+         distance: 40,
+         source: src
+      });
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          view: new ol.View({
+          center: ol.proj.fromLonLat([37.41, 8.82]),
+          zoom: 4
+        })
+      });
+      map.addOverlay(olpopup);
+      map.on('click', function(evt){
+         map.forEachFeatureAtPixel(evt.pixel, function(feature_, layer){
+            if(feature_.get('features').length > 1){
+               return;
+            }
+            feature_.get('features').forEach(function(feature){
+               console.log(feature);
+               let props = feature.getProperties();
+               document.getElementById("link").setAttribute('href', 'https://www.google.com/search?q='
+                  +urlescape("site:www.summitpost.org+")
+                  +urlescape(props.NAME));
+               document.getElementById("link").innerHTML = props.NAME;
+               document.getElementById("rating").innerHTML = "RATING: " + props.SCORE;
+               document.getElementById("hits").innerHTML = "HITS: " + props.HITS;
+               olpopup.setPosition(evt.coordinate);
+            });
+         });
+      });
+    </script>
+  </body>
+</html>
