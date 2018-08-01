@@ -6,12 +6,30 @@
 #info *{
    font-size:30px;
 }
-#rollover{
+#searchBox{
    height:33%;
+}
+#optionsBox{
+   height:10%;
+}
+#rollover{
    background-color:rgba(255,255,255,.9);
    overflow-y:scroll;
    z-index:10;
    bottom:0;
+   height:80%;
+}
+input {
+   max-width:100%;
+}
+.entryName{
+   cursor:pointer;
+   color:blue;
+}
+.entry{
+   border-style:solid;
+   border-color:black;
+   padding:5px;
 }
 #betaView{
    height:66%;
@@ -35,6 +53,7 @@
    display:none;
 }
 #leftTab{
+   min-width:363px;
    top:0;
    left:0;
    position:absolute;

@@ -1,6 +1,7 @@
 let map = undefined;
 let peaksLayer = undefined;
 let callout = undefined;
+let foundLayer = undefined;
 const MAX_ZOOM = 15;
 
 
@@ -90,20 +91,17 @@ function populateOverlay(features){
    ro.innerHTML = "";
    features.forEach(function(f){
       const props = f.getProperties();
-      console.log(props);
       const name = props.NAME;
       const hits = props.HITS;
       const rate = props.SCORE;
       const link = props.URL;
       const extent = f.getGeometry().getExtent();
       const entry = [
-         "<div id='"+name+"Entry'>",
+         "<div class='entry' id='"+name+"Entry'>",
          "<h4>",
-         //"<a href='"+link+"'>",
-         "<div onclick='populateBetaView(\""+link+"\")'>",
+         "<div class='entryName' onclick='populateBetaView(\""+link+"\")'>",
          name,
          "</div>",
-         //"</a>",
          "</h4>",
          "<div>",
          hits,
@@ -127,7 +125,8 @@ function toggleLeftTab(){
    const toggle = document.getElementById("leftTabToggle");
    if(toggle.innerHTML === "&gt;"){
       toggle.innerHTML = "&lt;";
-      toggle.style.left = "33%";
+      console.log(leftTab.offsetWidth);
+      toggle.style.left = leftTab.offsetWidth+"px";
    }else{
       toggle.innerHTML = "&gt;";
       toggle.style.left = "0";
@@ -151,5 +150,40 @@ function mapClick(evt){
 function main(){
    initMap();
 }
-
+function showSubset(found){
+   map.removeLayer(foundLayer);
+   const source = new ol.source.Vector({features:found});   
+   const clusterSource = new ol.source.Cluster({
+      distance: 40,
+      source: source});
+   foundLayer = new ol.layer.Vector({
+      title: "search results",
+      source: clusterSource,
+      style: peaksStyleFunction,
+   });
+   map.addLayer(foundLayer);
+}
+function hidePeaks(){
+   map.removeLayer(peaksLayer)
+}
+function showPeaks(){
+   map.removeLayer(foundLayer);
+   map.addLayer(peaksLayer);
+}
+function search(){
+   let all = peaksLayer.getSource().getFeatures();
+   let searchStr = document.getElementById("searchString").value;
+   let found = [];
+   all.forEach(function(cluster){
+      cluster.get("features").forEach(function(feature){
+         let props = feature.getProperties();
+         if(props.NAME.toLowerCase().indexOf(searchStr) >= 0){
+            found.push(feature);
+         }
+      });
+   });
+   hidePeaks();
+   showSubset(found);
+   populateOverlay(found);
+}
 window.onload = main;

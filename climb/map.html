@@ -20,8 +20,19 @@
          </div>
          <div class="hide" id="leftTab">
             <iframe id="betaView"></iframe>
-            <div id="rollover">
-               Click on a cluster to populate!
+            <div id="searchBox">
+               <div id="optionsBox">
+                  <input id="searchString" type="text"></input>
+                  <button onclick="search()">Search</button>
+                  <button onclick="showPeaks()">Clear Search</button>
+               </div>
+               <div>
+                  <input id="filter?" type="text"></input>
+                  <button onclick="filter()">Filter</button>
+               </div>
+               <div id="rollover">
+                  Click on a cluster to populate!
+               </div>
             </div>
          </div>
             <div id="leftTabToggle" onclick="toggleLeftTab()">&gt;</div>
