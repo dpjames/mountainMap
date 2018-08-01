@@ -89,6 +89,11 @@ function populateBetaView(url){
 function populateOverlay(features){
    const ro = document.getElementById("rollover");
    ro.innerHTML = "";
+   if(features.length > 100){
+      ro.innerHTML = "Too many results, refine search/filter";
+      ro.innerHTML += " to see the list view populate.";
+      return;
+   }
    features.forEach(function(f){
       const props = f.getProperties();
       const name = props.NAME;
@@ -171,13 +176,17 @@ function showPeaks(){
    map.addLayer(peaksLayer);
 }
 function search(){
-   let all = peaksLayer.getSource().getFeatures();
    let searchStr = document.getElementById("searchString").value;
+   filter(function(f){
+      return f.getProperties().NAME.toLowerCase().indexOf(searchStr) >=0;
+   });
+}
+function filter(condition){
+   let all = peaksLayer.getSource().getFeatures();
    let found = [];
    all.forEach(function(cluster){
       cluster.get("features").forEach(function(feature){
-         let props = feature.getProperties();
-         if(props.NAME.toLowerCase().indexOf(searchStr) >= 0){
+         if(condition(feature)){
             found.push(feature);
          }
       });
@@ -185,5 +194,27 @@ function search(){
    hidePeaks();
    showSubset(found);
    populateOverlay(found);
+}
+function filterClick(){
+   const fieldEl = document.getElementById("filterField");
+   const field = fieldEl.options[fieldEl.selectedIndex].value
+   const opEl = document.getElementById("filterOperator");
+   const op = opEl.options[opEl.selectedIndex].value
+   const value = document.getElementById("filterValue").value;
+   var opFunction = function(op1, op2){
+      switch(op){
+         case "<":
+            return op1 < op2;
+         case ">":
+            return op1 > op2;
+         case "=":
+            return op1 == op2;
+      }
+   };
+   filter(function(f){
+      const props = f.getProperties();
+      const fvalue = props[field] 
+      return opFunction(fvalue, value);
+   });
 }
 window.onload = main;

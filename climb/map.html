@@ -27,8 +27,17 @@
                   <button onclick="showPeaks()">Clear Search</button>
                </div>
                <div>
-                  <input id="filter?" type="text"></input>
-                  <button onclick="filter()">Filter</button>
+                  <select id="filterField">
+                     <option value="SCORE">Rating</option> 
+                     <option value="HITS">Hits</option> 
+                  </select>
+                  <select id="filterOperator">
+                     <option value="<">is less than</option> 
+                     <option value=">">is greater than</option> 
+                     <option value="=">is equal to</option> 
+                  </select>
+                  <input id="filterValue"></input>
+                  <button onclick="filterClick()">Filter</button>
                </div>
                <div id="rollover">
                   Click on a cluster to populate!
