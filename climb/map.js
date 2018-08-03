@@ -89,12 +89,12 @@ function populateBetaView(url){
 function populateOverlay(features){
    const ro = document.getElementById("rollover");
    ro.innerHTML = "";
-   if(features.length > 100){
-      ro.innerHTML = "Too many results, refine search/filter";
-      ro.innerHTML += " to see the list view populate.";
-      return;
-   }
+   var count = 0;
    features.forEach(function(f){
+      if(count >= 100){
+         return;
+      }
+      count++;
       const props = f.getProperties();
       const name = props.NAME;
       const hits = props.HITS;
@@ -124,14 +124,21 @@ function populateOverlay(features){
       ro.innerHTML += entry;
    });
 }
+function isSmallScreen(){
+   return (getWidth() < 1200)
+}
 function toggleLeftTab(){
    const leftTab = document.getElementById("leftTab");
    leftTab.classList.toggle("hide");
    const toggle = document.getElementById("leftTabToggle");
-   if(toggle.innerHTML === "&gt;"){
+   const expand = toggle.innerHTML === "&gt;";
+   if(expand){
       toggle.innerHTML = "&lt;";
-      console.log(leftTab.offsetWidth);
-      toggle.style.left = leftTab.offsetWidth+"px";
+      if(isSmallScreen()){
+         toggle.style.left = (leftTab.offsetWidth - toggle.offsetWidth) + "px";
+      } else {
+         toggle.style.left = leftTab.offsetWidth+"px";
+      }
    }else{
       toggle.innerHTML = "&gt;";
       toggle.style.left = "0";
@@ -217,4 +224,25 @@ function filterClick(){
       return opFunction(fvalue, value);
    });
 }
+
+function getWidth() {
+   return Math.max(
+      document.body.scrollWidth,
+      document.documentElement.scrollWidth,
+      document.body.offsetWidth,
+      document.documentElement.offsetWidth,
+      document.documentElement.clientWidth
+   );
+}
+
+function getHeight() {
+   return Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.offsetHeight,
+      document.documentElement.clientHeight
+   );
+}
+
 window.onload = main;

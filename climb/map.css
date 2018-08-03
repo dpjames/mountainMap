@@ -65,6 +65,11 @@ input {
 #filterValue{
    max-width:100px;
 }
+@media (max-width: 1200px) {
+    #leftTab{
+      width:100%;
+    }
+}
 #popup{
    width:auto;
    padding: 10px 25px;
