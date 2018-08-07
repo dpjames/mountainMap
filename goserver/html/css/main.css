@@ -1,0 +1,26 @@
+
+#navbar {
+   background-color : red;
+}
+#mainContent {
+   background-color : blue;
+}
+#footer {
+   background-color : green;
+}
+#greeting {
+   background-color : green;
+   text-align : center;
+   font-size : 32px;
+}
+#loginContent, #signupContent{
+   background-color : yellow;
+   text-align : center;
+}
+#loginForm {
+   text-align : center;
+   
+}
+#loginForm table{
+   margin : 0 auto;
+}

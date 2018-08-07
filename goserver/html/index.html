@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test Site v2</title>
+<link rel="stylesheet" href="css/main.css">
+<script src="index.js"></script>
+</head>
+
+<body>
+   <div id="navbar"></div>
+   <div id="mainContent"></div>
+   <div id="footer"></div>
+</body>
+<script>
+   window.onload = main;
+   window.onpopstate = (function(e){
+      console.log(e.state['place']); 
+      goTo(e.state['place'], true);
+   });
+</script>
+</html>
