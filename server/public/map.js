@@ -4,10 +4,6 @@ let callout = undefined;
 let foundLayer = undefined;
 const MAX_ZOOM = 15;
 
-
-
-
-
 function peaksStyleFunction(feature){
    const num = feature.get("features").length; 
       let image = null;
@@ -35,22 +31,10 @@ function peaksStyleFunction(feature){
       return [new ol.style.Style({text:text, image:image})];
 }
 
-function initPeaksLayer(){
-   const src = new ol.source.Vector({
-      url:"./peaks.geojson", 
-      format: new ol.format.GeoJSON()});
-   const clusterSrc = new ol.source.Cluster({
-      distance: 40,
-      source: src});
-   peaksLayer = new ol.layer.Vector({
-      title: "peaks layer",
-      source: clusterSrc,
-      style: peaksStyleFunction,
-      });
-}
+
 
 function initMap(){
-   initPeaksLayer();
+   initPeaksLayer("./ppeaks.geojson");
    callout = new ol.Overlay({
       element: document.getElementById("popup")});
    layers = [
@@ -66,6 +50,92 @@ function initMap(){
       });
    map.addOverlay(callout);
    map.on("click", mapClick);
+   //map.on("moveend", mapMove);
+   /*
+   map.getView().on('change:resolution',function(e){
+      // change cluster distance here (and refresh it)
+      console.log(e);
+      peaksLayer.getSource().setDistance(10);
+   });
+   */
+}
+function mapMove(e){
+   const map = e.map;
+   const extent = e.frameState.extent;
+   const url = getURL(extent); 
+   /*
+   fetch(url)
+      .then(function(res){
+         return res.json();
+      })
+      .then(function(json){
+         diffFeatures(json);
+      });
+   */
+   var oldPeaks = peaksLayer;
+   initPeaksLayer(url);
+   map.addLayer(peaksLayer);
+   peaksLayer.on("postcompose", function(e){
+      if(peaksLayer.getVisible()){
+         map.removeLayer(oldPeaks);
+      }
+   });
+}
+function getURL(extent){
+   console.log(extent);
+   const ul = ol.proj.toLonLat([extent[0],extent[1]])
+   const lr = ol.proj.toLonLat([extent[2],extent[3]])
+   let url = "/peaks?";
+   url+="ul=";
+   url+=(ul[0] + "," + ul[1]);
+   url+="&lr=";
+   url+=(lr[0] + "," + lr[1]);
+   return url;
+}
+function diffFeatures(json){
+   let geojsonformat = new ol.format.GeoJSON();
+   let newfeatures = geojsonformat.readFeatures(json, {featureProjection: 'EPSG:3857'});
+   let clusterFeatures = peaksLayer.getSource().features
+   let oldfeatures = [];
+   clusterFeatures.forEach(function(f){
+      f.get("features").forEach(function(ff){
+         oldfeatures.push(ff); 
+      });
+   });
+   let goodfeatures = []
+   newfeatures.forEach(function(nf, nfindex){
+      oldfeatures.forEach(function(of, ofindex){
+         if(of.get("NAME") === nf.get("NAME")){
+            newfeatures.splice(nfindex, 1);
+            oldfeatures.splice(ofindex, 1);
+            goodfeatures.push(of);
+            return;
+         } 
+      });
+   });
+   peaksLayer.getSource().getSource().addFeatures(newfeatures);
+   fsrc = peaksLayer.getSource().getSource();
+   oldfeatures.forEach(function(f){
+      fsrc.removeFeature(f);
+   });
+   /*
+   newfeatures.forEach(function(f){
+      peaksLayer.getSource().getSource().addFeature(f);
+   });
+   */
+} 
+function initPeaksLayer(url){
+   const src = new ol.source.Vector({
+      format: new ol.format.GeoJSON(),
+      url:getURL,
+      strategy: ol.loadingstrategy.bbox});
+   const clusterSrc = new ol.source.Cluster({
+      distance: 100,
+      source: src});
+   peaksLayer = new ol.layer.Vector({
+      title: "peaks layer",
+      source: clusterSrc,
+      style: peaksStyleFunction});
 }
 function populateCallout(f, c){
    const props = f.getProperties();
