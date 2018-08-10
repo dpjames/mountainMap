@@ -61,7 +61,7 @@ func sendPeaks(response []Peak, w http.ResponseWriter){
    for _, p := range response {
       json+="{"
       json+=jsonkvp("type", "Feature", true);
-      json+=jsonkvp("id", p.ID, true);
+      json+=jsonkvp("id", p.ID);
       json+="\"geometry\": {"
       json+=jsonkvp("type", "Point", true);
       json+="\"coordinates\": [ "+fmt.Sprint(p.Lon)+", "+fmt.Sprint(p.Lat)+" ]"
@@ -143,8 +143,7 @@ func readPeaks() {
          hits,
          score,
          url,
-         fmt.Sprint(i)};
-      i++;
+         i++};
       peaks = append(peaks, entry);
       if err != nil {
          fmt.Println(err);
