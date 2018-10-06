@@ -160,7 +160,6 @@ func readPeaks() {
 }
 
 func main() {
-   readPeaks();
    r := mux.NewRouter()
    fmt.Println("Listening on port ", PORT);
    r.HandleFunc("/peaks", getPeaks).Methods("GET");

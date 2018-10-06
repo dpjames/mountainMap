@@ -1,0 +1,88 @@
+.map {
+  height: 100%;
+  width: 100%;
+  position:relative;
+}
+#info *{
+   font-size:30px;
+}
+#searchBox{
+   height:33%;
+}
+#optionsBox{
+   height:10%;
+}
+#rollover{
+   background-color:rgba(255,255,255,.9);
+   overflow-y:scroll;
+   z-index:10;
+   bottom:0;
+   height:80%;
+}
+input {
+   max-width:100%;
+}
+.entryName{
+   cursor:pointer;
+   color:blue;
+}
+.entry{
+   border-style:solid;
+   border-color:black;
+   padding:5px;
+}
+#betaView{
+   height:66%;
+   width:100%;
+}
+#leftTabToggle{
+   vertical-align: middle;
+   text-align: center;
+   line-height:50px;
+   width:20px;
+   height:50px;
+   position:absolute;
+   left:0;
+   top: 45%;
+   z-index:11;
+   background-color:rgba(255,255,255,.6);
+   border-style:solid;
+   border-color:black;
+}
+.hide{
+   display:none;
+}
+#leftTab{
+   min-width:363px;
+   top:0;
+   left:0;
+   position:absolute;
+   z-index:10;
+   width:33%;
+   height:100%;
+   background-color:rgba(200,200,200,.7);
+}
+#filterValue{
+   max-width:100px;
+}
+@media (max-width: 1200px) {
+    #leftTab{
+      width:100%;
+    }
+}
+#popup{
+   width:auto;
+   padding: 10px 25px;
+   border-style:solid;
+   border-color:black;
+   background-color:rgb(300,300,300);
+   border-radius:100px;
+   position:absolute;
+}
+#link, .label{
+   overflow:hidden;
+   white-space: nowrap;
+}
+.data{
+   float:right;
+}
