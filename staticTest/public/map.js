@@ -72,6 +72,7 @@ function populateCallout(f, c){
    let link = document.getElementById("link");
    //link.setAttribute("href", "https://www.summitpost.org"+props.URL.replace(" ",""));
    link.innerHTML = props.NAME;
+   document.getElementById("approx elevation").innerHTML = props.ELEVATION.toFixed(2);
    document.getElementById("rating").innerHTML = props.SCORE;
    document.getElementById("hits").innerHTML = props.HITS;
    populateBetaView(props.URL);
@@ -114,7 +115,7 @@ function populateOverlay(features){
          " hits",
          "</div>",
          "<div>",
-         elevation,
+         "approx " + elevation.toFixed(2),
          " meters",
          "</div>",
          "<div>",
