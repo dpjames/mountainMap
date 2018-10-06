@@ -14,9 +14,10 @@
    <body>
       <div id="map" class="map">
          <div id="popup">
-            <div class="label">Name:   <a id="link"></a></div>
-            <div class="label">Rating: <div class="data" id="rating"></div></div>
-            <div class="label">Hits:   <div class="data" id="hits"></div></div>
+            <div class="label">Name:      <a id="link"></a></div>
+            <div class="label">Elevation: <div class="data" id="elevation"></div></div>
+            <div class="label">Rating:    <div class="data" id="rating"></div></div>
+            <div class="label">Hits:      <div class="data" id="hits"></div></div>
          </div>
          <div class="hide" id="leftTab">
             <iframe id="betaView"></iframe>
@@ -30,6 +31,7 @@
                   <select id="filterField">
                      <option value="SCORE">Rating</option> 
                      <option value="HITS">Hits</option> 
+                     <option value="ELEVATION">Elevation</option> 
                   </select>
                   <select id="filterOperator">
                      <option value="<">is less than</option> 
